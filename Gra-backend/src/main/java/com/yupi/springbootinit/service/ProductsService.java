@@ -34,4 +34,11 @@ public interface ProductsService extends IService<Products> {
      * @return
      */
     Boolean editProducts(ProductsRequest productsRequest);
+
+    /**
+     * 根据烟草产品id删除
+     * @param id
+     * @return
+     */
+    Boolean deleteById(Long id);
 }

@@ -21,7 +21,7 @@ import java.util.List;
  * 烟草产品接口
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/products")
 @Slf4j
 public class ProductsController {
 
@@ -33,7 +33,7 @@ public class ProductsController {
      * @return
      */
     @PostMapping("/list")
-    public BaseResponse<List<Products>> listProducts(@RequestBody ProductsSearchRequest productsSearchRequest) {
+    public BaseResponse<List<Products>> listProducts(@RequestBody(required = false) ProductsSearchRequest productsSearchRequest) {
         if (productsSearchRequest == null) {
             return ResultUtils.success(productsService.list());
         }
@@ -64,6 +64,6 @@ public class ProductsController {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        return ResultUtils.success(productsService.removeById(deleteRequest.getId()));
+        return ResultUtils.success(productsService.deleteById(deleteRequest.getId()));
     }
 }

@@ -6,14 +6,18 @@ import com.yupi.springbootinit.common.ErrorCode;
 import com.yupi.springbootinit.exception.BusinessException;
 import com.yupi.springbootinit.model.dto.products.ProductsRequest;
 import com.yupi.springbootinit.model.dto.products.ProductsSearchRequest;
+import com.yupi.springbootinit.model.entity.CustomerOrders;
 import com.yupi.springbootinit.model.entity.Products;
+import com.yupi.springbootinit.service.CustomerOrdersService;
 import com.yupi.springbootinit.service.ProductsService;
 import com.yupi.springbootinit.mapper.ProductsMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +29,9 @@ import java.util.List;
 @Service
 public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, Products>
         implements ProductsService {
+
+    @Resource
+    private CustomerOrdersService customerOrdersService;
 
     @Override
     public List<Products> listProducts(ProductsSearchRequest productsSearchRequest) {
@@ -69,12 +76,31 @@ public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, Products>
             QueryWrapper<Products> productsQueryWrapper = new QueryWrapper<>();
             productsQueryWrapper.eq("brand", productsRequest.getBrand());
             productsQueryWrapper.eq("specification", productsRequest.getSpecification());
-            if (this.count(productsQueryWrapper) > 0) {
-                throw new BusinessException(ErrorCode.PARAMS_ERROR, "该品牌规格已存在");
+            List<Products> productsList = this.list(productsQueryWrapper);
+            if (!CollectionUtils.isEmpty(productsList)) {
+                for (Products products : productsList) {
+                    if (!products.getId().equals(productsRequest.getId())) {
+                        throw new BusinessException(ErrorCode.PARAMS_ERROR, "该品牌规格已存在");
+                    }
+                }
             }
         }
         BeanUtils.copyProperties(productsRequest, oldProducts);
         return this.updateById(oldProducts);
+    }
+
+    @Override
+    public Boolean deleteById(Long id) {
+        if (id == null || id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        QueryWrapper<CustomerOrders> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id);
+        long count = customerOrdersService.count(queryWrapper);
+        if (count > 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "该烟草产品存在于销售记录中，无法删除");
+        }
+        return this.removeById(id);
     }
 }
 
