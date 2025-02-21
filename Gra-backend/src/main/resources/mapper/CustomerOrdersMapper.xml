@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yupi.springbootinit.mapper.CustomerOrdersMapper">
+
+    <resultMap id="BaseResultMap" type="com.yupi.springbootinit.model.entity.CustomerOrders">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="customer_id" column="customer_id" jdbcType="INTEGER"/>
+            <result property="product_id" column="product_id" jdbcType="INTEGER"/>
+            <result property="region_id" column="region_id" jdbcType="INTEGER"/>
+            <result property="sales_channel" column="sales_channel" jdbcType="VARCHAR"/>
+            <result property="order_date" column="order_date" jdbcType="DATE"/>
+            <result property="order_quantity" column="order_quantity" jdbcType="INTEGER"/>
+            <result property="order_amount" column="order_amount" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,customer_id,product_id,
+        region_id,sales_channel,order_date,
+        order_quantity,order_amount
+    </sql>
+
+    <select id="listByTime" resultType="com.yupi.springbootinit.model.vo.ChartVO">
+        SELECT
+            DATE_FORMAT(order_date, '%Y-%m-%d') AS date,  <!-- 格式化日期为 'yyyy-MM-dd' -->
+            products.brand AS brand,
+            products.specification AS specification,
+            regions.affiliated_region AS region
+        FROM
+            customer_orders join products on customer_orders.product_id = products.id join regions on customer_orders.region_id = regions.id
+        WHERE
+            order_date BETWEEN #{before} AND #{now}
+    </select>
+</mapper>
