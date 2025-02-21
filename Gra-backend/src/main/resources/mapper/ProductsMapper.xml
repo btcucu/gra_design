@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yupi.springbootinit.mapper.ProductsMapper">
+
+    <resultMap id="BaseResultMap" type="com.yupi.springbootinit.model.entity.Products">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="brand" column="brand" jdbcType="VARCHAR"/>
+            <result property="specification" column="specification" jdbcType="VARCHAR"/>
+            <result property="price" column="price" jdbcType="DECIMAL"/>
+            <result property="price_level" column="price_level" jdbcType="OTHER"/>
+            <result property="current_stock" column="current_stock" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,brand,specification,
+        price,price_level,current_stock
+    </sql>
+</mapper>
