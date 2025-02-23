@@ -1,4 +1,9 @@
 declare namespace API {
+  type analyzeByTimeUsingPOSTParams = {
+    /** time */
+    time?: string;
+  };
+
   type BaseResponseBoolean_ = {
     code?: number;
     data?: boolean;
@@ -8,6 +13,18 @@ declare namespace API {
   type BaseResponseInt_ = {
     code?: number;
     data?: number;
+    message?: string;
+  };
+
+  type BaseResponseListChartVO_ = {
+    code?: number;
+    data?: ChartVO[];
+    message?: string;
+  };
+
+  type BaseResponseListProducts_ = {
+    code?: number;
+    data?: Products[];
     message?: string;
   };
 
@@ -69,6 +86,13 @@ declare namespace API {
     code?: number;
     data?: UserVO;
     message?: string;
+  };
+
+  type ChartVO = {
+    brand?: string;
+    date?: string;
+    region?: string;
+    specification?: string;
   };
 
   type checkUsingGETParams = {
@@ -249,6 +273,34 @@ declare namespace API {
     userId?: number;
   };
 
+  type Products = {
+    brand?: string;
+    current_stock?: number;
+    id?: number;
+    price?: number;
+    price_level?: string;
+    specification?: string;
+  };
+
+  type ProductsRequest = {
+    brand?: string;
+    current_stock?: number;
+    id?: number;
+    price?: number;
+    price_level?: string;
+    specification?: string;
+  };
+
+  type ProductsSearchRequest = {
+    brand?: string;
+    current_stock?: number;
+    id?: number;
+    maxPrice?: number;
+    minPrice?: number;
+    price_level?: string;
+    specification?: string;
+  };
+
   type uploadFileUsingPOSTParams = {
     biz?: string;
   };
@@ -257,14 +309,11 @@ declare namespace API {
     createTime?: string;
     id?: number;
     isDelete?: number;
-    mpOpenId?: string;
-    unionId?: string;
     updateTime?: string;
     userAccount?: string;
     userAvatar?: string;
     userName?: string;
     userPassword?: string;
-    userProfile?: string;
     userRole?: string;
   };
 
