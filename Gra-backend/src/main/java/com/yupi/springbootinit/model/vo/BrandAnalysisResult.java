@@ -31,6 +31,7 @@ public class BrandAnalysisResult {
     public static class SpecSales {
         private String specification;
         private double totalOrderAmount;
+
     }
 
     // 不同地区的销量数据内部类
